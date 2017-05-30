@@ -16,24 +16,37 @@ class LoadStarredRepos extends Component {
 
     this.state = {
       username: '',
-      repos: []
+      repos: [],
+      error: false
     };
 
   }
   handleUserSearch(e) {
     e.preventDefault();
 
-    this.props.loading();
+    this.setState({ error: false });
 
-    const searchedUser = gh.getUser(this.state.username);
-    searchedUser.listStarredRepos()
-       .then(({data: reposJson}) => {
-         console.log(`duder has ${reposJson.length} repos!`);
-         console.log(reposJson);
-         this.setState({ repos: reposJson });
-         this.props.grabNewState(this.state);
+    if (this.state.username === '') {
+      this.props.loading();
+      this.setState({ error: true }, () => {
+        this.props.grabNewState(this.state);
+      });
 
-       });
+
+    }else {
+
+      this.props.loading();
+
+      const searchedUser = gh.getUser(this.state.username);
+      searchedUser.listStarredRepos()
+         .then(({data: reposJson}) => {
+           console.log(`duder has ${reposJson.length} repos!`);
+           console.log(reposJson);
+           this.setState({ repos: reposJson });
+           this.props.grabNewState(this.state);
+
+         });
+    }
   }
   handleUsernameChange(e) {
     e.preventDefault();
@@ -43,16 +56,22 @@ class LoadStarredRepos extends Component {
   render() {
     return(
       <div>
-        <form onSubmit={this.handleUserSearch}>
-          <input
-            value={this.state.username}
-            placeholder='Search a username'
-            onChange={this.handleUsernameChange}
-          />
-          <button>Search!</button>
-        </form>
 
-        {this.props.children}
+        <div className="header">
+          {"Type in somone's GitHub username below to see their favorite repos!"}
+        </div>
+
+          <form onSubmit={this.handleUserSearch}>
+            <input
+
+              value={this.state.username}
+              placeholder='Search a username'
+              onChange={this.handleUsernameChange}
+            />
+            <button>Search!</button>
+          </form>
+
+          {this.props.children}
 
       </div>
     )

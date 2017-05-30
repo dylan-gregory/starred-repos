@@ -15,6 +15,7 @@ class App extends Component {
 
     this.state = {
       searching: null,
+      error: null,
       username: '',
       repos: []
     }
@@ -25,7 +26,7 @@ class App extends Component {
   }
   grabNewState(newProps) {
     console.log('new', newProps);
-    this.setState({ repos: newProps.repos, username: newProps.username, searching: false });
+    this.setState({ repos: newProps.repos, username: newProps.username, searching: false, error: newProps.error });
   }
   render() {
     return (
@@ -35,7 +36,11 @@ class App extends Component {
 
           {(this.state.searching ? <LoadingStarredRepos /> : null)}
 
+          { this.state.error ? <ErrorLoadingStarredRepos /> : null }
+
           {(this.state.repos.length === 0) && (this.state.username !== '') ? <ErrorLoadingStarredRepos /> : null }
+
+
 
           {(this.state.repos !== 0) ? <ListStarredRepos repos={this.state.repos} /> : null}
 

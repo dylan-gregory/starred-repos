@@ -17,9 +17,9 @@ class ListStarredRepos extends Component {
       return (
         <li key={repo.id}>
           <div>
-            <span className="repo-name">{repo.name}</span>
-            <span className="repo-owner">{repo.owner.login}</span>
-            <span className="repo-url"><a>{repo.url}</a></span>
+            <span className="repo-details">Repo Name: {repo.name}</span>
+            <span className="repo-details">Created by: {repo.owner.login}</span>
+            <span className="repo-details">Link to project:<a href={repo.html_url}> {repo.html_url}</a></span>
           </div>
         </li>
       )
